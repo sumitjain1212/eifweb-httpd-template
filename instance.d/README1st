@@ -1,0 +1,4 @@
+Add instance specific stuff in this dir like
+
+isntance.d/myinstancename_php.conf
+isntance.d/myinstancename_ssl.conf

@@ -1,0 +1,8 @@
+All files ending with *.conf get included.
+
+They are included alphabetically.
+
+A File a.conf will get loaded before z.conf. File 1.conf will get loaded before a.conf.
+Remmember rc.d ? 04Sxys.sh before 23Sdkjf.sh :).
+
+So modules.conf gets renamed to 0modules.conf because they should be loaded first.

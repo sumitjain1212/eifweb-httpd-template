@@ -1,0 +1,68 @@
+##------------------------------------##
+## mod jk properties - status, managers
+##------------------------------------##
+
+# default
+worker.list=jkstatus
+worker.jkstatus.type=status
+
+##------------------------------------##
+## templates - EIF WEB defaults!
+## (DO NOT MODIFY) (DO NOT MODIFY)
+##------------------------------------##
+
+# eifweb node templates (DO NOT MODIFY)
+worker.template-eif-node.type=ajp13
+#worker.template-eif-node.socket_connect_timeout=5000
+worker.template-eif-node.socket_connect_timeout=15000
+worker.template-eif-node.socket_keepalive=true
+worker.template-eif-node.ping_mode=A
+#worker.template-eif-node.ping_timeout=5000
+worker.template-eif-node.ping_timeout=30000
+#worker.template-eif-node.connection_pool_minsize=0
+#worker.template-eif-node.connection_pool_timeout=700
+#worker.template-eif-node.connection_pool_size=250
+#worker.template-eif-node.reply_timeout=600000
+worker.template-eif-node.reply_timeout=1000000
+worker.template-eif-node.recovery_options=3
+worker.template-eif-node.session_cookie=JSESSIONID
+
+# balncer (DO NOT MODIFY)
+worker.template-eif-lb.type=lb
+worker.template-eif-lb.error_escalation_time=0
+worker.template-eif-lb.max_reply_timeouts=8
+worker.template-eif-lb.sticky_session=true
+#worker.template-eif-lb.sticky_session=false
+worker.template-eif-lb.method=Traffic
+worker.template-eif-lb.retries=2
+
+
+##------------------------------------##
+## application specific sections below
+## (Yes you can change these!)
+##------------------------------------##
+
+## add your apps below
+
+##------------------------------------##
+# myapp node - template
+# worker.template-myapp.reference=worker.template-eif-node
+#
+# # myapp load balancer - template
+# worker.template-myapp-lb.reference=worker.template-eif-lb
+#
+# # Load balancer
+# worker.list=myapp-lb
+# worker.myapp-lb.reference=worker.template-myapp-lb
+# worker.myapp-lb.balance_workers=myapp-backend1,myapp-backend2
+# worker.myapp-lb.sticky_session=True
+#
+# # actual backends
+# worker.myapp-backend1.reference=worker.template-myapp
+# worker.myapp-backend1.host=sjc5-appl-myapp1.cisco.com
+#
+# worker.myapp-backend2.reference=worker.template-myapp
+# worker.myapp-backend2.host=sjc5-appl-myapp2.cisco.com
+#
+##------------------------------------##
+

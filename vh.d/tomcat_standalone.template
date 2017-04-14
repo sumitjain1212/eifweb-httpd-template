@@ -1,0 +1,68 @@
+## created from [% template.name %] - [% name %] v[% version %]
+## [% case %] on [% date %]
+
+ServerName [% url %].cisco.com
+ServerAlias [% url %].cisco.com [% url %]
+
+DocumentRoot ${EIF_APACHE_VDOCROOT}/[% url %]
+ServerAdmin [% webmaster %]
+
+
+# logs
+ErrorLog     ${EIF_APACHE_LOGDIR}/common/[% url %]_error_log
+TransferLog  ${EIF_APACHE_LOGDIR}/common/[% url %]_access_log
+
+
+# include common and rewrites
+Include ${EIF_APACHE_CONFDIR}/vh.d/common_*.conf
+
+RewriteCond %{HTTP_HOST}        !^[% url %].cisco.com
+RewriteCond %{HTTP_HOST}        !^$
+RewriteCond %{SERVER_PORT}      !^80$
+RewriteRule ^/(.*)              http://[% url %].cisco.com:%{SERVER_PORT}/$1 [L,R]
+
+RewriteCond %{HTTP_HOST}        !^[% url %].cisco.com
+RewriteCond %{HTTP_HOST}        !^$
+RewriteRule ^/(.*)              http://[% url %].cisco.com/$1 [L,R]
+
+
+# include ssl if present
+<IfModule ssl_module>
+  include ${EIF_APACHE_CONFDIR}/vh.d/[% url %]_ssl*.conf
+</IfModule>
+
+
+# cec scriptalias
+ScriptAlias /cgi-bin/cec/       ${EIF_APACHE_TEMPLATE}/pcgi-bin/cec/
+ScriptAlias /pcgi-bin/cec/      ${EIF_APACHE_TEMPLATE}/pcgi-bin/cec/
+ScriptAlias /cgi-bin/           ${EIF_APACHE_VDOCROOT}/[% url %]/cgi-bin/
+ScriptAlias /cgi/               ${EIF_APACHE_VDOCROOT}/[% url %]/cgi/
+
+
+# main docroot
+<Directory ${EIF_APACHE_VDOCROOT}/[% url %]>
+  Include ${EIF_APACHE_CONFDIR}/auth.conf
+  Options Indexes FollowSymLinks ExecCGI Includes
+  AddHandler server-parsed .shtml .html
+  AllowOverride All
+  Order allow,deny
+  Allow from all
+</Directory>
+
+
+#fcgi php.ini in docroot
+<IfModule mod_fcgid.c>
+  FcgidInitialEnv PHPRC ${EIF_APACHE_VDOCROOT}/[% url %]
+</IfModule>
+
+
+# tomcat stuff
+<Location />
+  Include ${EIF_APACHE_CONFDIR}/auth.conf
+  require valid-user
+  ProxyPass ajp://[% server %]:[% port %]/ route=[% jvm %]
+</Location>
+
+
+# custom stuff
+
