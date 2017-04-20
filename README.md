@@ -26,3 +26,25 @@ This template is designed for 2.4 httpd shared hosting only.
      - To fetch latest changes from the main/remote repo
             - git pull
 
+### To merge in latest updates from eifweb-httpd-template
+
+```
+# add remote
+git remote add eifweb-httpd-template ssh://git@bitbucket-eng-sjc1.cisco.com:7999/eifadmin/eifweb-httpd-template.git
+git remote -v
+
+# fetch template
+git fetch eifweb-httpd-template
+git branch -a -vvv
+
+# checkout
+git checkout --track eifweb-httpd-template/httpd-2.4
+git fetch
+
+# merge in template's httpd-2.4 into master
+git checkout master
+git merge httpd-2.4
+
+# push master
+git push
+```
