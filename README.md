@@ -37,12 +37,15 @@ git remote -v
 git fetch eifweb-httpd-template
 git branch -a -vvv
 
-# checkout
+# checkout & fetch the branch httpd-2.4
 git checkout --track eifweb-httpd-template/httpd-2.4
 git fetch
 
-# merge in template's httpd-2.4 into master
+# go back to master
 git checkout master
+git diff httpd-2.4
+
+# merge stuff to master
 git merge httpd-2.4
 
 # push master
