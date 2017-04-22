@@ -39,10 +39,16 @@ git branch -a -vvv
 
 # checkout & fetch the branch httpd-2.4
 git checkout --track eifweb-httpd-template/httpd-2.4
-git fetch
-
-# go back to master
+git pull
 git checkout master
+```
+
+Once remote is added you pull and merge
+```
+# pull latest httpd-2.4
+git checkout httpd-2.4 && git pull && git checkout master
+
+# check whats diff
 git diff httpd-2.4
 
 # merge stuff to master
