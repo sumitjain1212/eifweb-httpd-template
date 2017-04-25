@@ -1,4 +1,4 @@
-<Macro MACRO_VH @{MACRO_VH_URL_FQDN} @{MACRO_VH_URL_SHORT} @{MACRO_VH_DOCROOT} @{MACRO_VH_WEBMASTER}>
+<Macro MACRO_VH @{MACRO_VH_URL_FQDN} @{MACRO_VH_URL_SHORT} @{MACRO_VH_DOCROOT} @{MACRO_VH_WEBMASTER} @{MACRO_VH_PROXY1_HOSTPORT} @{MACRO_VH_PROXY1_NAME} @{MACRO_VH_PROXY2_HOSTPORT} @{MACRO_VH_PROXY2_NAME}>
 
     ServerName @{MACRO_VH_URL_FQDN}
     ServerAlias @{MACRO_VH_URL_FQDN} @{MACRO_VH_URL_SHORT}
@@ -56,4 +56,16 @@
 
 
     # custom stuff
+    # tomcat stuff
+    <Location />
+      Include ${EIF_APACHE_CONFDIR}/auth.conf
+      require valid-user
+      ProxyPass balancer://@{MACRO_VH_URL_SHORT}_cluster/ stickysession=JSESSIONID nofailover=Off
+    </Location>
+
+    <Proxy balancer://@{MACRO_VH_URL_SHORT}_cluster>
+      BalancerMember ajp://@{MACRO_VH_PROXY1_HOSTPORT} route=@{MACRO_VH_PROXY1_NAME}  loadfactor=1
+      BalancerMember ajp://@{MACRO_VH_PROXY2_HOSTPORT} route=@{MACRO_VH_PROXY2_NAME}  loadfactor=1
+      ProxySet lbmethod=bytraffic
+    </Proxy>
 </Macro>
