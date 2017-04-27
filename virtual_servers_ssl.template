@@ -1,4 +1,4 @@
 
 <virtualhost ${EIF_APACHE_CONF_LISTENSSL}>
-  ${EIF_APACHE_CONFDIR}/vh.d/[% url %]_ssl.conf
+  ${EIF_APACHE_CONFDIR}/vh.d/{{ url_fqdn }}_ssl.conf
 </virtualhost>

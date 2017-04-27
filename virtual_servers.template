@@ -1,4 +1,4 @@
 
 <VirtualHost ${EIF_APACHE_CONF_LISTEN}>
-  Include ${EIF_APACHE_CONFDIR}/vh.d/[% url %].conf
+  Include ${EIF_APACHE_CONFDIR}/vh.d/{{ url_fqdn }}.conf
 </VirtualHost>
