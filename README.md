@@ -30,7 +30,7 @@ This template is designed for 2.4 httpd shared hosting only.
 
 ```
 # add remote
-git remote add eifweb-httpd-template ssh://git@bitbucket-eng-sjc1.cisco.com:7999/eifadmin/eifweb-httpd-template.git
+git remote add eifweb-httpd-template ssh://git@eifadmin-git.cisco.com:7999/eifadmin/eifweb-httpd-template.git
 git remote -v
 
 # fetch template
