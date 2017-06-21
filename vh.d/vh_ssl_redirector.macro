@@ -1,0 +1,10 @@
+<Macro MACRO_VH_SSL_REDIRECTOR ${MACRO_VH_URL_FQDN} ${MACRO_VH_URL_SHORT}>
+    ServerName ${MACRO_VH_URL_FQDN}
+    ServerAlias ${MACRO_VH_URL_FQDN} ${MACRO_VH_URL_SHORT}
+
+    ErrorLog     ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_SHORT}_error_log
+    TransferLog  ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_SHORT}_access_log
+
+    RewriteCond %{HTTPS}            !=on
+    RewriteRule ^/?(.*)             https://${MACRO_VH_URL_FQDN}/$1 [R,L]
+</Macro>

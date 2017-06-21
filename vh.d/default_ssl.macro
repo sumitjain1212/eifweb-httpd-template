@@ -1,9 +1,0 @@
-
-<Macro MACRO_SSL @{MACRO_SSL_URL_SHORT}>
-    SSLEngine on
-
-    SSLCertificateFile      ${EIF_APACHE_CONFDIR}/certs.d/[% url_short %].pem
-    SSLCertificateChainFile ${EIF_APACHE_CONFDIR}/certs.d/[% url_short %].pem
-
-    Include ${EIF_APACHE_CONFDIR}/vh.d/[% url_short %].conf
-</Macro>

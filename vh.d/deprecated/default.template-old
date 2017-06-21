@@ -20,6 +20,9 @@ RewriteRule ^(.*)$              - [env=proto:https]
 RewriteCond %{HTTPS}            !=on
 RewriteRule ^(.*)$              - [env=proto:http]
 
+RewriteCond %{HTTPS}            !=on
+RewriteRule ^/?(.*)             https://${MACRO_VH_URL_FQDN}/$1 [R,L]
+
 RewriteCond %{HTTP_HOST}        !^{{ url_fqdn }}
 RewriteCond %{HTTP_HOST}        !^$
 RewriteCond %{SERVER_PORT}      !^80$
