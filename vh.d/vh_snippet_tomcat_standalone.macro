@@ -1,10 +1,10 @@
 <Macro MACRO_SNIPPET_TOMCAT_CLUSTER ${MACRO_VH_PROXY1_HOSTPORT} ${MACRO_VH_PROXY1_NAME}>
-  <Proxy balancer://${MACRO_VH_URL_SHORT}_cluster>
+  <Proxy balancer://macrobalancer>
     BalancerMember ajp://${MACRO_VH_PROXY1_HOSTPORT} route=${MACRO_VH_PROXY1_NAME}  loadfactor=1
     ProxySet lbmethod=bytraffic
   </Proxy>
 
-  ProxyPass / balancer://${MACRO_VH_URL_SHORT}_cluster/ stickysession=JSESSIONID nofailover=Off
+  ProxyPass / balancer://macrobalancer/ stickysession=JSESSIONID nofailover=Off
 
   <Location />
     Include ${EIF_APACHE_CONFDIR}/auth.conf
