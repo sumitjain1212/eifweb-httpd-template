@@ -1,5 +1,5 @@
 # This uses mod_macro to populate httpd conf
 
-Include ${EIF_APACHE_CONFDIR}/vh.d/vh_ssl.macro
-Use MACRO_VH_SSL_REDIRECTOR {{ url_fqdn }} {{ url_short }}  {{ documentroot }} {{ webmaster }}
+Include ${EIF_APACHE_CONFDIR}/vh.d/vh_ssl_redirector.macro
+Use MACRO_VH_SSL_REDIRECTOR {{ url_fqdn }} {{ url_short }}
 UndefMacro MACRO_VH_SSL_REDIRECTOR
