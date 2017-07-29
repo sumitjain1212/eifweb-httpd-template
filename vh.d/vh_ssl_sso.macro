@@ -8,11 +8,12 @@
 
     SSLEngine on
     SSLCertificateFile      ${EIF_APACHE_CONFDIR}/certs.d/${MACRO_VH_URL_SHORT}.pem
+    SSLCertificateChainFile ${EIF_APACHE_CONFDIR}/certs.d/${MACRO_VH_URL_SHORT}.pem
 
 
     # logs
-    ErrorLog     ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_FQDN}_error_log
-    TransferLog  ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_FQDN}_access_log
+    ErrorLog     ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_SHORT}_error_log
+    TransferLog  ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_SHORT}_access_log
 
 
     # include common and rewrites
@@ -62,4 +63,12 @@
 
 
     # custom stuff
+    <Location /*>
+    Include ${EIF_APACHE_CONFDIR}/auth.conf
+     <Limit GET POST>
+      require valid-user
+      require group allusers
+     </Limit>
+    </Location>
+
 </Macro>

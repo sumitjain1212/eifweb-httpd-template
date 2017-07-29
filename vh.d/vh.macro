@@ -8,8 +8,8 @@
 
 
     # logs
-    ErrorLog     ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_SHORT}_error_log
-    TransferLog  ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_SHORT}_access_log
+    ErrorLog     ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_FQDN}_error_log
+    TransferLog  ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_FQDN}_access_log
 
 
     # include common and rewrites
@@ -57,3 +57,4 @@
     # custom stuff
 
 </Macro>
+

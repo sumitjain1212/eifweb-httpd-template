@@ -1,13 +1,10 @@
-<Macro MACRO_VH_SSL ${MACRO_VH_URL_FQDN} ${MACRO_VH_URL_SHORT} ${MACRO_VH_DOCROOT} ${MACRO_VH_WEBMASTER}>
+<Macro MACRO_VH ${MACRO_VH_URL_FQDN} ${MACRO_VH_URL_SHORT} ${MACRO_VH_DOCROOT} ${MACRO_VH_WEBMASTER}>
 
     ServerName ${MACRO_VH_URL_FQDN}
     ServerAlias ${MACRO_VH_URL_FQDN} ${MACRO_VH_URL_SHORT}
 
     DocumentRoot ${MACRO_VH_DOCROOT}
     ServerAdmin ${MACRO_VH_WEBMASTER}
-
-    SSLEngine on
-    SSLCertificateFile      ${EIF_APACHE_CONFDIR}/certs.d/${MACRO_VH_URL_SHORT}.pem
 
 
     # logs
@@ -22,10 +19,6 @@
     RewriteRule ^(.*)$              - [env=proto:https]
     RewriteCond %{HTTPS}            !=on
     RewriteRule ^(.*)$              - [env=proto:http]
-
-    RewriteCond %{HTTPS}            !=on
-    RewriteRule ^/?(.*)             https://${MACRO_VH_URL_FQDN}/$1 [R,L]
-
 
     RewriteCond %{HTTP_HOST}        !^${MACRO_VH_URL_FQDN}
     RewriteCond %{HTTP_HOST}        !^$
@@ -62,4 +55,13 @@
 
 
     # custom stuff
+
+    <Location /*>
+    Include ${EIF_APACHE_CONFDIR}/auth.conf
+     <Limit GET POST>
+      require valid-user
+      require group allusers
+     </Limit>
+    </Location>
 </Macro>
+
