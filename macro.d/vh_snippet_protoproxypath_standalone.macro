@@ -1,0 +1,13 @@
+<Macro MACRO_SNIPPET_PROTOPROXYPATH_STANDALONE ${MACRO_VH_PROXY1_PROTOHOSTPORT} ${MACRO_VH_PROXY_PATH} >
+  <Proxy balancer://${MACRO_VH_URL_SHORT}_cluster>
+    BalancerMember ${MACRO_VH_PROXY1_PROTO}://${MACRO_VH_PROXY1_PROTOHOSTPORT}
+    ProxySet lbmethod=bytraffic
+  </Proxy>
+
+  ProxyPass "${MACRO_VH_PROXY_PATH}" balancer://${MACRO_VH_URL_SHORT}_cluster/${MACRO_VH_PROXY_PATH}
+
+  <Location />
+    Include ${EIF_APACHE_CONFDIR}/auth.conf
+    Require valid-user
+  </Location>
+</Macro>

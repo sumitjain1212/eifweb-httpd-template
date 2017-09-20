@@ -1,5 +1,5 @@
 # This uses mod_macro to populate httpd conf
 
-Include ${EIF_APACHE_CONFDIR}/vh.d/default.macro
+Include ${EIF_APACHE_CONFDIR}/macro.d/default.macro
 Use MACRO_VH {{ url_fqdn }} {{ url_short }}  {{ documentroot }} {{ webmaster }}
 UndefMacro MACRO_VH
