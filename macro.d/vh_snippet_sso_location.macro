@@ -1,0 +1,8 @@
+<Macro MACRO_SNIPPET_SSO_LOCATION ${MACRO_VH_LOCATION}>
+  <LocationMatch "${MACRO_VH_LOCATION}">
+    Include ${EIF_APACHE_CONFDIR}/auth.conf
+    <Limit GET POST>
+      Require valid-user
+    </Limit>
+  </LocationMatch>
+</Macro>

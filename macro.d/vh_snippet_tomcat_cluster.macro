@@ -6,9 +6,5 @@
   </Proxy>
 
   ProxyPass / balancer://${MACRO_VH_URL_SHORT}_cluster/ stickysession=JSESSIONID nofailover=Off
-
-  <Location />
-    Include ${EIF_APACHE_CONFDIR}/auth.conf
-    Require valid-user
-  </Location>
+  ProxyPassReverse / balancer://${MACRO_VH_URL_SHORT}_cluster/
 </Macro>

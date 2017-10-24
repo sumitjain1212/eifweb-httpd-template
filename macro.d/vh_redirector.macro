@@ -1,10 +1,10 @@
-<Macro MACRO_VH_REDIRECTOR ${MACRO_VH_SRC_URL_FQDN} ${MACRO_VH_SRC_URL_SHORT} ${MACRO_VH_DEST_URL_FQDN}>
-    ServerName ${MACRO_VH_SRC_URL_FQDN}
-    ServerAlias ${MACRO_VH_SRC_URL_FQDN} ${MACRO_VH_SRC_URL_SHORT}
+<Macro MACRO_VH_REDIRECTOR ${MACRO_VH_URL_FQDN} ${MACRO_VH_URL_SHORT} ${MACRO_VH_REDIRECT_URL_FQDN}>
+    ServerName ${MACRO_VH_URL_FQDN}
+    ServerAlias ${MACRO_VH_URL_FQDN} ${MACRO_VH_URL_SHORT}
 
-    ErrorLog     ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_SRC_URL_SHORT}_error_log
-    TransferLog  ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_SRC_URL_SHORT}_access_log
+    ErrorLog     ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_FQDN}_error_log
+    TransferLog  ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_FQDN}_access_log
 
-    RewriteRule ^/?(.*)             http://${MACRO_VH_DEST_URL_FQDN}/$1 [R,L]
+    RewriteRule ^/?(.*)             http://${MACRO_VH_REDIRECT_URL_FQDN}/$1 [R,L]
 </Macro>
 
