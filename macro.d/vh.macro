@@ -43,6 +43,7 @@
       Include ${EIF_APACHE_CONFDIR}/auth.conf
       Options Indexes FollowSymLinks ExecCGI Includes
       AddHandler server-parsed .shtml .html
+      SSILegacyExprParser on 
       AllowOverride All
       Require all granted
     </Directory>
