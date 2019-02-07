@@ -5,11 +5,5 @@
   <Location />
     Include ${EIF_APACHE_CONFDIR}/auth.conf
     Require valid-user
-    <IfDefine AUTHOIDC>
-      OIDCPassRefreshToken Off
-	  RequestHeader unset Authorization
-	  RequestHeader unset Oidc_access_token
-	  RequestHeader unset Oidc_access_token_expires
-	</IfDefine>
   </Location>
 </Macro>

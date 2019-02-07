@@ -68,7 +68,6 @@
     Include ${EIF_APACHE_CONFDIR}/auth.conf
      <Limit GET POST>
       require valid-user
-      require group allusers
      </Limit>
     </Location>
 

@@ -62,12 +62,6 @@
       <Limit GET POST>
         require valid-user
       </Limit>
-      <IfDefine AUTHOIDC>
-        OIDCPassRefreshToken Off
-        RequestHeader unset Authorization
-        RequestHeader unset Oidc_access_token
-        RequestHeader unset Oidc_access_token_expires
-      </IfDefine>
     </Location>
 </Macro>
 
