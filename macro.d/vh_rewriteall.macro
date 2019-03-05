@@ -1,0 +1,37 @@
+<Macro MACRO_VH_REWRITEALL ${MACRO_VH_URL_FQDN} ${MACRO_VH_URL_SHORT} ${MACRO_VH_WEBMASTER} ${MACRO_VH_TARGET}>
+
+    ServerName ${MACRO_VH_URL_FQDN}
+    ServerAlias ${MACRO_VH_URL_FQDN} ${MACRO_VH_URL_SHORT}
+
+    DocumentRoot /dev/null
+    ServerAdmin ${MACRO_VH_WEBMASTER}
+
+
+    # logs
+    ErrorLog     ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_FQDN}_error_log
+    TransferLog  ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_FQDN}_access_log
+
+
+    # include common and rewrites
+    Include ${EIF_APACHE_CONFDIR}/vh.d/common_*.conf
+
+    RewriteCond %{HTTPS}            =on
+    RewriteRule ^(.*)$              - [env=proto:https]
+    RewriteCond %{HTTPS}            !=on
+    RewriteRule ^(.*)$              - [env=proto:http]
+
+    RewriteCond %{HTTP_HOST}        !^${MACRO_VH_URL_FQDN}
+    RewriteCond %{HTTP_HOST}        !^$
+    RewriteCond %{SERVER_PORT}      !^80$
+    RewriteCond %{SERVER_PORT}      !^443$
+    RewriteRule ^/(.*)              %{ENV:proto}://${MACRO_VH_URL_FQDN}:%{SERVER_PORT}/$1 [L,R]
+
+    RewriteCond %{HTTP_HOST}        !^${MACRO_VH_URL_FQDN}
+    RewriteCond %{HTTP_HOST}        !^$
+    RewriteRule ^/(.*)              %{ENV:proto}://${MACRO_VH_URL_FQDN}/$1 [L,R]
+
+    # custom stuff
+    ## RewriteRule .*                   ${MACRO_VH_TARGET} [R,NE]
+    RewriteRule ^/(.*)                  ${MACRO_VH_TARGET}/$1 [R,NE]
+</Macro>
+
