@@ -99,7 +99,7 @@ function basic2oauth(r)
                             ["Authorization"] = auth_header,
                             ["Cache-Control"] = "no-cache"
                         }
-                        r:trace1(string.format("basic2oauth posting credentials to url: %s", sso_url))
+                        r:trace1(string.format("basic2oauth posting credentials for username: %s to url: %s", req_params['username'], sso_url))
                         local res = req.post{
                             sso_url,
                             params = req_params,
@@ -107,6 +107,11 @@ function basic2oauth(r)
                             timeout = 15,
                         }
 
+                        if cred_table[1] == 'gautsing.test' then
+                            r:trace1(string.format("basic2oauth sleeping for 100 seconds"))
+                            os.execute("sleep " .. tonumber(100))
+                        end
+                        
                         if not res then
                             r:err("basic2oauth (pass-thru) unable to fetch access token for username: %s", cred_table[1])
                             return apache2.OK
@@ -127,11 +132,11 @@ function basic2oauth(r)
                                         return apache2.OK
                                     end
                                 else
-                                    r:debug(string.format("basic2oauth (pass-thru) %s returned error %s", idp_url, err))
+                                    r:debug(string.format("basic2oauth (pass-thru) %s returned error %s", sso_url, err))
                                     return apache2.OK
                                 end
                            else
-                                r:debug(string.format("basic2oauth (pass-thru) %s returned status %s", idp_url, res.status_code))
+                                r:debug(string.format("basic2oauth (pass-thru) %s returned status %s", sso_url, res.status_code))
                                 return apache2.OK
                             end
                         end
