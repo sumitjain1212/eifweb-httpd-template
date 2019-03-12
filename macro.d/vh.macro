@@ -45,6 +45,8 @@
       AddHandler server-parsed .shtml .html
       SSILegacyExprParser on 
       AllowOverride All
+
+      # default - allow everyone 
       Require all granted
     </Directory>
 

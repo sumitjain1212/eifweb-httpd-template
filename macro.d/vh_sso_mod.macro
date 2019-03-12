@@ -1,4 +1,4 @@
-<Macro MACRO_VH_SSL ${MACRO_VH_URL_FQDN} ${MACRO_VH_URL_SHORT} ${MACRO_VH_DOCROOT} ${MACRO_VH_WEBMASTER}>
+<Macro MACRO_VH ${MACRO_VH_URL_FQDN} ${MACRO_VH_URL_SHORT} ${MACRO_VH_DOCROOT} ${MACRO_VH_WEBMASTER}>
 
     ServerName ${MACRO_VH_URL_FQDN}
     ServerAlias ${MACRO_VH_URL_FQDN} ${MACRO_VH_URL_SHORT}
@@ -6,14 +6,10 @@
     DocumentRoot ${MACRO_VH_DOCROOT}
     ServerAdmin ${MACRO_VH_WEBMASTER}
 
-    SSLEngine on
-    SSLCertificateFile      ${EIF_APACHE_CONFDIR}/certs.d/${MACRO_VH_URL_SHORT}.pem
-    SSLCertificateChainFile ${EIF_APACHE_CONFDIR}/certs.d/${MACRO_VH_URL_SHORT}.pem
-
 
     # logs
-    ErrorLog     ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_SHORT}_error_log
-    TransferLog  ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_SHORT}_access_log
+    ErrorLog     ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_FQDN}_error_log
+    TransferLog  ${EIF_APACHE_LOGDIR}/common/${MACRO_VH_URL_FQDN}_access_log
 
 
     # include common and rewrites
@@ -23,10 +19,6 @@
     RewriteRule ^(.*)$              - [env=proto:https]
     RewriteCond %{HTTPS}            !=on
     RewriteRule ^(.*)$              - [env=proto:http]
-
-    RewriteCond %{HTTPS}            !=on
-    RewriteRule ^/?(.*)             https://${MACRO_VH_URL_FQDN}/$1 [R,L]
-
 
     RewriteCond %{HTTP_HOST}        !^${MACRO_VH_URL_FQDN}
     RewriteCond %{HTTP_HOST}        !^$
@@ -53,9 +45,9 @@
       AddHandler server-parsed .shtml .html
       SSILegacyExprParser on
       AllowOverride All
-
-      # default - allow everyone 
-      Require all granted
+      
+      # default - allow only authenticated 
+      Require valid-user
     </Directory>
 
 
@@ -66,11 +58,5 @@
 
 
     # custom stuff
-    <Location /*>
-    Include ${EIF_APACHE_CONFDIR}/auth.conf
-     <Limit GET POST>
-      require valid-user
-     </Limit>
-    </Location>
-
 </Macro>
+

@@ -45,6 +45,8 @@
       AddHandler server-parsed .shtml .html
       SSILegacyExprParser on
       AllowOverride All
+
+      # default - allow everyone 
       Require all granted
     </Directory>
 
@@ -57,7 +59,7 @@
 
     # custom stuff
 
-    <Location /*>
+    <Location />
       Include ${EIF_APACHE_CONFDIR}/auth.conf
       <Limit GET POST>
         require valid-user

@@ -1,0 +1,8 @@
+<Macro MACRO_SNIPPET_SSO_DIRECTORY ${MACRO_VH_DOCROOT} ${MACRO_VH_PATH}>
+  <Directory ${MACRO_VH_DOCROOT}${MACRO_VH_PATH}>
+    Include ${EIF_APACHE_CONFDIR}/auth.conf
+    <Limit GET POST>
+      Require valid-user
+    </Limit>
+  </Directory>
+</Macro>
