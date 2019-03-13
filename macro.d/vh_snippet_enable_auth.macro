@@ -1,6 +1,8 @@
 <Macro MACRO_SNIPPET_LOCATION_AUTH ${MACRO_VH_LOCATION}>
   <Location @{MACRO_VH_LOCATION}>
     Include ${EIF_APACHE_CONFDIR}/auth.conf
-    Require valid-user
+    <Limit GET POST>
+      Require valid-user
+    </Limit>
   </Location>
 </Macro>
