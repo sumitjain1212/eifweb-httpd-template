@@ -1,6 +1,11 @@
 require 'apache2'
 req = require('requests')
 
+-- Just do nothing...
+function bypass(r)
+    return apache2.OK
+end
+    
 
 function notempty(s)
     if s == nil or s == '' then
