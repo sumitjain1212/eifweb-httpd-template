@@ -5,7 +5,7 @@ req = require('requests')
 function bypass(r)
     return apache2.OK
 end
-    
+
 
 function notempty(s)
     if s == nil or s == '' then
@@ -27,7 +27,7 @@ end
 function envvar(r)
     local envt = {}
     local envvar_path = r.server_info()["server_root"]  .. "/bin/envvars.eifweb"
-    if notempty(r:ivm_get("basic2oauth_sso_url")) and notempty(r:ivm_get("basic2oauth_client_id")) and notempty(r:ivm_get("basic2oauth_client_secret")) and notempty(r:ivm_get("basic2oauth_header")) then 
+    if notempty(r:ivm_get("basic2oauth_sso_url")) and notempty(r:ivm_get("basic2oauth_client_id")) and notempty(r:ivm_get("basic2oauth_client_secret")) and notempty(r:ivm_get("basic2oauth_header")) then
         envt["client_id"] = r:ivm_get("basic2oauth_client_id")
         envt["client_secret"] = r:ivm_get("basic2oauth_client_secret")
         envt["header"] = r:ivm_get("basic2oauth_header")
@@ -97,7 +97,7 @@ function basic2oauth(r)
                         local req_params = {
                             grant_type = 'password',
                             username = cred_table[1],
-                            password = cred_table[2]
+                            password = r:escape(cred_table[2])
                         }
                         local req_headers = {
                             ["Content-Type"] = "application/x-www-form-urlencoded",
@@ -116,7 +116,7 @@ function basic2oauth(r)
                             r:trace1(string.format("basic2oauth sleeping for 100 seconds"))
                             os.execute("sleep " .. tonumber(100))
                         end
-                        
+
                         if not res then
                             r:err("basic2oauth (pass-thru) unable to fetch access token for username: %s", cred_table[1])
                             return apache2.OK
