@@ -1,3 +1,3 @@
-# ssl cert.key
+# Dummy wildcard cert...
 # ssl cert.pem
-# e.g wwwin-secure-url.key
+# e.g wwwin-secure-url
