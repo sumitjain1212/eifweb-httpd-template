@@ -59,6 +59,10 @@
 
     # custom stuff
 
+    <If "reqenv('OIDC_CLAIM_access_level') =~ /^[0-3]$/">
+      Require expr env('OIDC_CLAIM_access_level') == '4'
+    </If>
+
     <Location />
       Include ${EIF_APACHE_CONFDIR}/auth.conf
       <Limit GET POST>
