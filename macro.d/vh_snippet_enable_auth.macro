@@ -1,8 +1,4 @@
 <Macro MACRO_SNIPPET_LOCATION_AUTH ${MACRO_VH_LOCATION}>
-  <If "reqenv('OIDC_CLAIM_access_level') =~ /^[0-3]$/">
-    Require expr env('OIDC_CLAIM_access_level') == '4'
-  </If>
-
   <Location @{MACRO_VH_LOCATION}>
     Include ${EIF_APACHE_CONFDIR}/auth.conf
     <Limit GET POST>

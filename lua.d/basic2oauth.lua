@@ -2,6 +2,8 @@
 require 'apache2'
 req = require('requests')
 
+local DEBUG_TAG = "eifwebsso.basic2oauth"
+
 -- Just for encoding --
 function char_to_hex (c)
     return string.format("%%%02X", string.byte(c))
@@ -92,7 +94,7 @@ function envvar(r)
 
     local file = io.open(envvar_path, "rb")
     if file then
-        r:err("basic2oauth (init) reading file: " .. envvar_path)
+        r:err("%s (init) reading file: " .. envvar_path)
         for line in file:lines() do
             if line:match("^##%sFound:%s") and line:match('%sEIF_APACHE_CONF_OIDC_1=([a-z0-9-]+),*%s*') and line:match('%sEIF_APACHE_CONF_OIDC_2=([a-z0-9A-Z]+),*%s*') then
                 local client_id = string.match(line, '%sEIF_APACHE_CONF_OIDC_1=([a-z0-9-]+),*%s*')
@@ -111,7 +113,7 @@ function envvar(r)
                     envt["client_secret"] = client_secret
                     envt["header"] = header
                     envt["sso_url"] = sso_url
-                    r:err("basic2oauth (init) success sso_url: " .. sso_url)
+                    r:err("%s (init) success sso_url: " .. sso_url)
                     break
                 end
             end
@@ -148,7 +150,7 @@ function basic2oauth(r)
 
             if isempty(envt['sso_url']) or isempty(envt['header']) then
                 -- needs to be retried
-                r:err("basic2oauth (failure) passing header because: envvar is empty, init failed")
+                r:err(string.format("%s (failure) uri: %s => passing header because: envvar is empty, init failed", r.uri, DEBUG_TAG))
                 return apache2.OK
             end
 
@@ -173,9 +175,9 @@ function basic2oauth(r)
                         ["Authorization"] = auth_header,
                         ["Cache-Control"] = "no-cache"
                     }
-                    r:trace1(string.format("basic2oauth (debug) posting credentials to url: %s", sso_url))
-                    r:trace1(string.format("basic2oauth (debug) posting credentials for user: %s", req_params['username']))
-                    -- r:trace1(string.format("basic2oauth (debug) posting credentials for pw1: %s", req_params['password']))
+                    r:trace1(string.format("%s (debug) uri: %s => posting credentials to url: %s", r.uri, DEBUG_TAG, sso_url))
+                    r:trace1(string.format("%s (debug) uri: %s => posting credentials for user: %s", r.uri, DEBUG_TAG, req_params['username']))
+                    -- r:trace1(string.format("%s (debug) posting credentials for pw1: %s", req_params['password']))
 
                     local res = req.post{
                         sso_url,
@@ -186,7 +188,7 @@ function basic2oauth(r)
 
                     if not res then
                         r.headers_in['X-EIF-BASICAUTH'] = string.format("failed 600")
-                        r:err("basic2oauth (failure) passing header because: api error when fetching access token for username: %s", cred_user)
+                        r:err("%s (failure) uri: %s => passing header because: api error when fetching access token for username: %s", r.uri, DEBUG_TAG, cred_user)
                         return apache2.OK
                     else
                         -- check status code
@@ -198,33 +200,33 @@ function basic2oauth(r)
                                 if tab.access_token ~= nil then
                                     r.headers_in['Authorization'] = string.format("Bearer %s", tab.access_token)
                                     r.headers_in['X-EIF-BASICAUTH'] = string.format("success")
-                                    r:trace1(string.format("basic2oauth (debug) insert header for %s with token %s", cred_user, tab.access_token))
-                                    r:err(  string.format("basic2oauth (success) insert header for %s", cred_user))
+                                    r:trace1(string.format("%s (debug) uri: %s => insert header for %s with token %s", r.uri, DEBUG_TAG, cred_user, tab.access_token))
+                                    r:err(  string.format("%s (success) uri: %s => insert header for %s", r.uri, DEBUG_TAG, cred_user))
                                     return apache2.OK
                                 end
                             end
                         else
-                            r:trace1(string.format("basic2oauth (debug) dumping res from url: %s %s", cred_pass, dump(res)))
-                            r:trace1(string.format("basic2oauth (debug) dumping res.json() from url: %s %s", cred_pass, dump(res.json())))
+                            r:trace1(string.format("%s (debug) uri: %s => dumping res from url: %s %s", r.uri, DEBUG_TAG, cred_pass, dump(res)))
+                            r:trace1(string.format("%s (debug) uri: %s => dumping res.json() from url: %s %s", r.uri, DEBUG_TAG, cred_pass, dump(res.json())))
                         end
                         -- For all other cases it is a fail
                         r.headers_in['X-EIF-BASICAUTH'] = string.format("failed %s ", res.status_code)
-                        r:err(string.format("basic2oauth (failure) passing header because: %s returned status %s", sso_url, res.status_code))
+                        r:err(string.format("%s (failure) uri: %s => passing header because: %s returned status %s", r.uri, DEBUG_TAG, sso_url, res.status_code))
                         return apache2.OK
                     end
                 end
                 -- For all other cases it is a fail
                 r.headers_in['X-EIF-BASICAUTH'] = string.format("failed 601")
-                r:err("basic2oauth (failure) passing header because: empty username or password")
+                r:err("%s (failure) uri: %s => passing header because: empty username or password", r.uri, DEBUG_TAG)
                 return apache2.OK
             end
             -- For all basic auth it is a fail
             r.headers_in['X-EIF-BASICAUTH'] = string.format("failed 602")
-            r:err("basic2oauth (failure) passing header because: invalid basic auth header")
+            r:err("%s (failure) uri: %s => passing header because: invalid basic auth header")
             return apache2.OK
         else
             local auth_header_type = get_authorization_header_type(auth)
-            r:err(string.format("basic2oauth (bypass) passing header because: auth header type is %s", auth_header_type))
+            r:err(string.format("%s (bypass) uri: %s => passing header because: auth header type is %s", r.uri, DEBUG_TAG, auth_header_type))
             return apache2.OK
         end
     end
@@ -236,6 +238,6 @@ end
 -- disable basic2oauth function
 function basic2oauth_disable(r)
     -- r.headers_in['X-EIF-BASICAUTH'] = string.format("disable 000")
-    r:err(string.format("basic2oauth (disable) insert header for vh: %s", r.hostname))
+    r:err(string.format("%s (disable) uri: %s => insert header for vh: %s", r.uri, DEBUG_TAG, r.hostname))
     return apache2.OK
 end
