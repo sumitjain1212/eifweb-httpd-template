@@ -135,3 +135,6 @@ bh_unicode_properties.cache
 GitHub.sublime-settings
 
 eifweb-httpd-template.code-workspace
+
+opa.d
+opa.d/*
